@@ -33,29 +33,49 @@ func NewTree[T comparable](value T) *Tree[T] {
 	}
 }
 
+// assumes x.right is not nil
 func (t *Tree[T]) leftRotate(x *node[T]) {
-	y := x.right // tree re-configuration
-	x.right = y.left
-	y.left = x
+	y := x.right // declares node y
 
-	y.parent = x.parent // update links between parents and children
+	x.right = y.left // y's left subtree becomes x's right subtree
+	y.left = x
 	if x.right != nil {
 		x.right.parent = x
 	}
-	if y.parent == nil {
+
+	y.parent = x.parent // link x's parent to y
+	if x.parent == nil {
 		t.root = y
-	} else if x == x.parent.left {
+	} else if x.parent.left == x {
 		x.parent.left = y
 	} else {
 		x.parent.right = y
 	}
 
-	y.left = x
+	y.left = x // x becomes y's left subtree
 	x.parent = y
 }
 
+// assumes y.left is not nil
 func (t *Tree[T]) rightRotate(y *node[T]) {
+	x := y.left // declares node x
 
+	y.left = x.right // x's right subtree becomes y's left subtree
+	if x.right != nil {
+		x.right.parent = y
+	}
+
+	x.parent = y.parent // link y's parent to x
+	if y.parent == nil {
+		t.root = x
+	} else if y.parent.left == y {
+		y.parent.left = x
+	} else {
+		y.parent.right = x
+	}
+
+	x.right = y // y becomes x's right subtree
+	y.parent = x
 }
 
 func Hello() string {
