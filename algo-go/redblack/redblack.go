@@ -1,7 +1,5 @@
 package redblack
 
-import "fmt"
-
 // Tree is a Red-Black Tree. Create one by using NewTree[T comparable](value T)
 // to initialize the root of the tree.
 type Tree[T comparable] struct {
@@ -76,10 +74,4 @@ func (t *Tree[T]) rightRotate(y *node[T]) {
 
 	x.right = y // y becomes x's right subtree
 	y.parent = x
-}
-
-func Hello() string {
-	t := NewTree(5)
-	fmt.Printf("%#v\n", t)
-	return "hello"
 }

@@ -1,11 +1,10 @@
 package redblack
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestHello(t *testing.T) {
-	want := "hello"
-	got := Hello()
-	if got != want {
-		t.Errorf("Hello() = %q, wanted %q", got, want)
-	}
+	tree := NewTree(5)
+	t.Logf("tree: %v\n", tree)
 }
