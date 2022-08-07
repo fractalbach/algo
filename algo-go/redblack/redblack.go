@@ -1,6 +1,11 @@
 package redblack
 
-import "golang.org/x/exp/constraints"
+import (
+	"fmt"
+	"strings"
+
+	"golang.org/x/exp/constraints"
+)
 
 // Tree is a Red-Black Tree. Create one by using NewTree[T comparable](value T)
 // to initialize the root of the tree.
@@ -102,6 +107,23 @@ func (t *Tree[T]) Insert(value T) {
 	t.insertFixup()
 }
 
-func (t *Tree[T]) insertFixup() {
+func (t *Tree[T]) insertFixup() {}
 
+// returns a string containing a nested-parentheses representation of the tree,
+// for example: (( 3 ) 5 (( 6 ) 7 ( 8 )))
+func (t *Tree[T]) string() string {
+	var b strings.Builder
+	buildString(&b, t.root)
+	return b.String()
+}
+
+func buildString[T constraints.Ordered](b *strings.Builder, n *node[T]) {
+	if n == nil {
+		return
+	}
+	b.WriteRune('(')
+	buildString(b, n.left)
+	fmt.Fprintf(b, " %v ", n.value)
+	buildString(b, n.right)
+	b.WriteRune(')')
 }
