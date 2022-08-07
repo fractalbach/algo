@@ -126,8 +126,8 @@ func buildString[T constraints.Ordered](b *strings.Builder, n *node[T]) {
 		return
 	}
 	b.WriteRune('(')
+	fmt.Fprintf(b, "%v", n.value)
 	buildString(b, n.left)
-	fmt.Fprintf(b, " %v ", n.value)
 	buildString(b, n.right)
 	b.WriteRune(')')
 }
