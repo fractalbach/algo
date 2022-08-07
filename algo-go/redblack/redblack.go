@@ -108,10 +108,56 @@ func (t *Tree[T]) Insert(value T) {
 	z.left = nil
 	z.right = nil
 	z.color = red
-	t.insertFixup()
+	t.insertFixup(z)
 }
 
-func (t *Tree[T]) insertFixup() {}
+func (t *Tree[T]) insertFixup(z *node[T]) {
+	for z.parent != nil && z.parent.color == red {
+
+		// Find the node z's uncle, and determine what side it's on. Start by
+		// assuming it's uncle is on left, then fix if needed.
+		var uncle *node[T] = z.parent.parent.left
+		var isUncleOnRight bool = false
+		if z.parent == uncle {
+			uncle = z.parent.parent.right
+			isUncleOnRight = true
+		}
+
+		// Case 1: When uncle is red, all we need to do is change the colorings
+		// of some nodes, and move the z pointer.
+		if (uncle != nil) && (uncle.color == red) {
+			z.parent.color = black
+			uncle.color = black
+			z = z.parent.parent
+			z.color = red
+			continue
+		}
+
+		// Case 2/3: When uncle is black (or nil), then we need to do rotations,
+		// the side that the uncle is on is important.
+		if isUncleOnRight {
+			if z == z.parent.right { // Case 2
+				z = z.parent
+				t.leftRotate(z)
+			} else { // Case 3
+				z.parent.color = black
+				z.parent.parent.color = red
+				t.rightRotate(z.parent.parent)
+			}
+
+		} else { // Uncle on Left
+			if z == z.parent.left { // Case 2
+				z = z.parent
+				t.rightRotate(z)
+			} else { // Case 3
+				z.parent.color = black
+				z.parent.parent.color = red
+				t.leftRotate(z.parent.parent)
+			}
+		}
+	}
+	t.root.color = black
+}
 
 // returns a string containing a nested-parentheses representation of the tree.
 // The nodes are printed using pre-order traversal, so the general format for
