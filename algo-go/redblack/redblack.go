@@ -113,8 +113,10 @@ func (t *Tree[T]) Insert(value T) {
 
 func (t *Tree[T]) insertFixup() {}
 
-// returns a string containing a nested-parentheses representation of the tree,
-// for example: (( 3 ) 5 (( 6 ) 7 ( 8 )))
+// returns a string containing a nested-parentheses representation of the tree.
+// The nodes are printed using pre-order traversal, so the general format for
+// each node will be (value(left)(right)). A more complete example looks like
+// (5(2(1)(3))(7)).
 func (t *Tree[T]) string() string {
 	var b strings.Builder
 	buildString(&b, t.root)
