@@ -100,6 +100,10 @@ func (t *Tree[T]) Insert(value T) {
 	z.parent = y
 	if y == nil {
 		t.root = z
+	} else if z.value < y.value {
+		y.left = z
+	} else {
+		y.right = z
 	}
 	z.left = nil
 	z.right = nil
